@@ -14,7 +14,7 @@ const app = express();
 // Windows and Linux users; You should have retained the user/pw from the pre-work for this course.
 // Your url may require that it's composed of additional information including user and password
 // const conString = 'postgres://USER:PASSWORD@HOST:PORT/DBNAME';
-const conString = 'postgres://chris:test@localhost:5432/kilovolt';
+const conString = 'postgres://patrick:test@localhost:5432/kilovolt';
 
 // REVIEW: Pass the conString to pg, which creates a new client object
 const client = new pg.Client(conString);
@@ -44,7 +44,7 @@ app.get('/new', function(request, response) {
 
 // REVIEW: Routes for making API calls to use CRUD Operations on our database
 
-// NOTE: The user sends an AJAX request for all articles to the server from Article.fetchAll(), then the server forms that request into a SQL query to the database and returns to the user a response containing the results of the request. This is a CRUD "Read" operation that goes through numbers 2,3,4,5 in the drawing.
+// NOTE: The user sends an AJAX request for all articles to the server from Article.fetchAll(), then the server forms that request into a SQL query to the database and returns to the user a response containing the results of the request. This is a CRUD "READ" operation that goes through numbers 2,3,4,5 in the drawing.
 app.get('/articles', function(request, response) {
   client.query('SELECT * FROM articles')
   .then(function(result) {
@@ -55,7 +55,7 @@ app.get('/articles', function(request, response) {
   })
 });
 
-// NOTE:The user sends an AJAX request to add a new record to article. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
+// NOTE:The user sends an AJAX request to add a new record to the server which then makes a SQL query to the article database which then returns a console message of 'insert complete' when done or an err message if there was an error. This is a CRUD "UPDATE" operation that goes through numbers 2,3,4,5 in the drawing.
 app.post('/articles', function(request, response) {
   client.query(
     `INSERT INTO
@@ -79,7 +79,7 @@ app.post('/articles', function(request, response) {
   });
 });
 
-// NOTE:The user sends an AJAX request to recieve and post a new article. This is a CRUD "Read" operation that goes through numbers 4,5,1 in the drawing.
+// NOTE:The user sends an AJAX request to update an existing article at specified Id to the server which then makes a SQL query to the database. The database then sends back a success message or error back to the server which then displays a console message of 'update complete' This is a CRUD "UPDATE" operation that goes through numbers 2,3,4,5 in the drawing.
 app.put('/articles/:id', function(request, response) {
   client.query(
     `UPDATE articles
@@ -105,7 +105,7 @@ app.put('/articles/:id', function(request, response) {
   });
 });
 
-// NOTE:The user sends an AJAX request to delete a single article. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
+// NOTE:The user sends an AJAX request to the server to delete a single article at a specified Id and then the server sends a SQL query to the database to delete a specified record from the database. The database then sends the server back a success message or err message a which will cause the server to display a different console message depending the success. This is a CRUD "DESTROY" operation that goes through numbers 2,3,4,5 in the drawing.
 app.delete('/articles/:id', function(request, response) {
   client.query(
     `DELETE FROM articles WHERE article_id=$1;`,
@@ -119,7 +119,7 @@ app.delete('/articles/:id', function(request, response) {
   });
 });
 
-// NOTE:The user sends an AJAX request to delete all records not the table. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
+// NOTE:The user sends an AJAX request to delete all records but, not the table, to the server which then sends a SQL query to the database to delete all articles. The database then responds to the server with success or err and the server then dipslays a console message of 'delete complete' or an error. This is a CRUD "DESTROY" operation that goes through numbers 2,3,4,5 in the drawing.
 app.delete('/articles', function(request, response) {
   client.query(
     'DELETE FROM articles;'
@@ -142,7 +142,7 @@ app.listen(PORT, function() {
 
 //////// ** DATABASE LOADER ** ////////
 ////////////////////////////////////////
-// NOTE: This is an AJAX for filling the DB with articles. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
+// NOTE: This is an AJAX request sent to the server for filling to fill the database with articles. The server then sends a SQL query to the database to fill the table articles data. It does this by seeing if there are articles in the database already and if not, add them. This is a CRUD "CREATE" operation that goes through numbers 2,3 in the drawing because we do not recieve a response when completed.
 function loadArticles() {
   client.query('SELECT COUNT(*) FROM articles')
   .then(result => {
@@ -162,7 +162,7 @@ function loadArticles() {
   })
 }
 
-// NOTE:The user sends an AJAX request to get the data if it does't exist. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
+// NOTE:The user sends an AJAX request to the server to create the table if one does not exist. The server then sends a SQL query to create a table in the database if one does not exist already. And to the run the function .loadArticles on the newly created database table. This is a CRUD "CREATE" operation that goes through numbers 2,3 in the drawing.
 function loadDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS articles (
