@@ -14,7 +14,7 @@ const app = express();
 // Windows and Linux users; You should have retained the user/pw from the pre-work for this course.
 // Your url may require that it's composed of additional information including user and password
 // const conString = 'postgres://USER:PASSWORD@HOST:PORT/DBNAME';
-const conString = 'postgres://patrick:test@localhost:5432/kilovolt';
+const conString = 'postgres://chris:test@localhost:5432/kilovolt';
 
 // REVIEW: Pass the conString to pg, which creates a new client object
 const client = new pg.Client(conString);
@@ -55,7 +55,7 @@ app.get('/articles', function(request, response) {
   })
 });
 
-// NOTE:
+// NOTE:The user sends an AJAX request to add a new record to article. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
 app.post('/articles', function(request, response) {
   client.query(
     `INSERT INTO
@@ -79,7 +79,7 @@ app.post('/articles', function(request, response) {
   });
 });
 
-// NOTE:
+// NOTE:The user sends an AJAX request to recieve and post a new article. This is a CRUD "Read" operation that goes through numbers 4,5,1 in the drawing.
 app.put('/articles/:id', function(request, response) {
   client.query(
     `UPDATE articles
@@ -105,7 +105,7 @@ app.put('/articles/:id', function(request, response) {
   });
 });
 
-// NOTE:
+// NOTE:The user sends an AJAX request to delete a single article. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
 app.delete('/articles/:id', function(request, response) {
   client.query(
     `DELETE FROM articles WHERE article_id=$1;`,
@@ -119,7 +119,7 @@ app.delete('/articles/:id', function(request, response) {
   });
 });
 
-// NOTE:
+// NOTE:The user sends an AJAX request to delete all records not the table. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
 app.delete('/articles', function(request, response) {
   client.query(
     'DELETE FROM articles;'
@@ -132,7 +132,7 @@ app.delete('/articles', function(request, response) {
   });
 });
 
-// NOTE:
+// NOTE: runs the loadDB function
 loadDB();
 
 app.listen(PORT, function() {
@@ -142,7 +142,7 @@ app.listen(PORT, function() {
 
 //////// ** DATABASE LOADER ** ////////
 ////////////////////////////////////////
-// NOTE:
+// NOTE: This is an AJAX for filling the DB with articles. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
 function loadArticles() {
   client.query('SELECT COUNT(*) FROM articles')
   .then(result => {
@@ -162,7 +162,7 @@ function loadArticles() {
   })
 }
 
-// NOTE:
+// NOTE:The user sends an AJAX request to get the data if it does't exist. This is a CRUD "Read" operation that goes through numbers 2,3 in the drawing.
 function loadDB() {
   client.query(`
     CREATE TABLE IF NOT EXISTS articles (
